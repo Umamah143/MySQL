@@ -1,0 +1,946 @@
+SQL Session-1 
+****************
+What is DBMS & RDBMS
+What is Database 
+What is SQL 
+Database Components - Client & Server
+Installing MySQL
+MySQL Workbench
+Connecting to the database & Querying Tables
+Database vs Schema
+SQL Commands
+********************
+
+DBMS --> DataBase Management System
+	Dbase, FoxPro, MS-access etc....
+
+RDBMS --> Relational Database Management System
+	Oracle, MS-SQL Server, DB2, MySQL, MS-Access etc..
+
+What is Database  ---> Data Storage Area
+
+SQL (Structured Query Language) ---> used to communicate to the database to perform different kinds of operations.
+
+Data is actually stored in the Database server (Remote machines)
+We can send SQL Commands using client software.
+
+2 Types client
+	--> Graphical mode (GUI)
+	--> CLI (Command Line Interface)
+
+Oracle Database ----> SQL Developer (GUI)
+			SQL Plus (CLI)
+			Squirrel
+			Toad etc..
+
+MySQL ------>MySQL Workbench (GUI)
+		SQL Plus 
+		Toad
+		Squirrel
+		Aquadata Studio
+
+Session 2
+----------
+To Install MySQL ---> https//dev.mysql.com/downloads/MySQL/
+
+in cli -> show databases
+
+use world
+
+show tables; --> it will show what are all the tables are available
+
+select * from locations;
+
+select * from world.locations;
+
+in CLI: select * from locations;
+
+Session -3
+----------
+SQL
+----
+Database
+
+Schema
+
+
+Use hr; ---> need to import hr database to practice in MySQL
+
+select * from employees;
+
+SQL Language 
+------------
+1. DDL(Data Definition Language) --> CREATE, ALTER, DROP, TRUNCATE. RENAME
+2. DML (Data Manipulation Language)---> INSERT, UPDATE, DELETE
+3. DRL/DQL (Data Retrieval Lanuage / Data Query Language )--> SELECT
+4. TCL (Transaction Control language) --> COMMIT, ROLLBACK, SAVEPOINT
+5. DCL (Data control Language) ---> GRANT, REVOKE
+
+Entities:
+--------
+Database 
+Table 
+
+Create Database/Schema
+-----------------------
+create database umadb;
+drop database umadb;
+
+or 
+
+create schema umadb;
+drop schema umadb;
+
+create database if not exists umadb;
+
+Creating Table
+---------------
+create table <<table name>> (col datatype, col2 datatypec, col3 datatype....);
+
+Example: 
+
+Use umadb;
+
+create table student (sno int(5), sname varchar(15), marks int(3));
+
+Describe student;
+
+Inserting data into table
+-------------------------
+
+Insert into <table name> values (val1, val2, val3...);
+
+Example
+-------
+-> USE umadb;
+-> Insert into student values (101, 'KIRAN', 80);y
+-> Insert into student(sname, sno, marks) values ('RAM', 102,60);
+-> Insert into student values (103, 'KRISHNA' null);
+
+select * from student;
+
+Selecting rows from a table
+---------------------------
+use hr;
+
+select * from employees; 
+select employee_id, first_name, salary from employees;
+select employee_id empid, first_name fname, salary +300 sal from employees;
+
+SQL Data Types:
+---------------
+-> Numeric (Tinyint, smallint, medium int, int, bigint, float, double(,) decimal(,))--> Int, bigint, double/decimal 
+-> Text (char, varchar, blob, mediumtext, mediumblob, longtext, longbob)
+-> Date/time(date, datetime, timestamp, time)
+
+Session 4
+---------
+where (filtering records based on conditions)
+
+use hr;
+
+select * from employees;
+select * from employees where salary >5000;
+select * from employees where salary <=5000;
+select * from employees where department_id=30;
+select * from employees where commission_pct is null;
+select * from employees where first_name='Jennifer';
+
+select department_id from employees;
+
+distinct (
+select distinct department_id from employees;
+select distinct * from employees;
+
+Logical Operators( And, or, not)
+-------------------------------
+use hr;
+
+set sql_safe_updates=0;
+select * from employees;
+select * from employees where salary<15000 And Job_id='AD_VP';
+select * from employees where salary<15000 or Job_id='AD_VP';
+select * from employees where first_name='David';
+select * from employees where not first_name='David';
+
+Between and IN Operators
+-------------------------
+Between -> Used to display the rows which is following in the range of values.
+Not Between
+
+Use hr;
+
+select * from employees where salary>=10000 and salary <=12000;
+
+select * from employees where salary between 10000 and 12000;
+select * from employees where salary not between 10000 and 12000;
+
+
+In -> IN operator return the rows when the values are matching in the list 
+not in
+
+select * from employees where salary = 3400 or salary=2500 or salary =3000;
+select * from employees where salary in (3400, 2500, 3000);
+select * from employees where salary not in (3400, 2500, 3000)
+
+pattern matching operators ( whiled card characters)
+----------------------------------------------------
+% -> Many characters
+_ -> single character
+
+select * from employees where first_name like 'S%';
+select * from employees where first_name like '%r';
+select * from employees where first_name like 'S%r';
+select * from employees where first_name like '%m%';
+
+select * from employees where first_name not like 'S%';
+select * from employees where first_name like '%e_';
+select * from employees where first_name like '___';
+
+Session -5
+----------
+DDL Commands(
+----------
+Create & Alter
+--------------
+-> Create is used to create database objects (Database, Table, views, synonyms etc...)
+
+Alter
+-----
+-> Adding a new column
+-> dropping the existing column
+-> Modifying the existing column (Increase/Decrease size of the column & change the data type of the column)
+-> Renaming a column
+
+use mydb;
+
+drop table student;
+
+create table student
+( sid int(4), sname varchar(15));
+
+describe student;
+
+insert into student values ( 101, 'David');
+insert into student values ( 102, 'Smith');
+insert into student values ( 103, 'scott');
+
+commit;
+
+select * from emp;
+
+
+Alter table student add (grade varchar(2)); 
+
+describe student;
+
+alter table student drop column grade;
+
+alter table student modify column sname varchar (20);
+
+alter table student rename column sname to stuname;
+
+
+Inserted some data in the table .
+commit;
+
+set autocommit=0;
+
+set sql_safe_updates = 0;
+
+select * from student;
+
+delete from student;
+
+rollback;
+
+insert into student values ( 101, 'Smith');
+insert into student values ( 102, 'David');
+insert into student values ( 103, 'Scott');
+
+commit;
+
+truncate table student;
+
+drop table student;
+
+Rename a table:
+--------------
+rename table jobs to designations;
+
+Differences between Drop, Truncate & delete
+--------------------------------------------
+
+• DROP TABLE STUDENT; -- Drops the structure & data
+• TRUNCATE TABLE STUDENT; -- Removes the all the rows
+permanently
+• DELETE FROM STUDENT; -- Removes the all the rows temporarily. We
+can Roll back the rows.
+
+MySQL functions:
+----------------
+1) String functions- operate on string data types 
+2) Numeric functions - operate on numeric data types 
+3) Date functions - operate on date data types 
+4) Aggregate functions - operate on all of the data types and produce summarized result sets.
+
+1) String functions
+-------------------
+Upper(): converts into upper case letters.
+-> select upper(first_name) from employees;
+
+Lower(): converts into lower case letters
+-> select lower(first_name) from employees;
+
+length(): return the length of string.
+
+-> select length('oracle');
+-> select * from employees where length(first_name)=4;
+
+trim(): Removes the specified characters from both sides.
+-> select trim('   oracle   ') from dual;
+-> select trim('z' from 'zzoraclezz') from dual;
+
+instr(): Returns the position of the character within a string 
+-> select instr('oracle', 'E');
+
+Substr()/SUBSTRING():Returns the substring of the string.
+
+-> select substr('oracle', 2,3);  -- RAC
+-> select substr ( 'oracle', 3,3) --ACL
+-> select substr('oracle',4,3) -- CLE
+
+Use hr;
+
+-> select substr(first_name,1,3) from employees;
+
+cpncat(): to join two strings 
+
+-> select concat('oracle', 'training');
+
+use hr;
+
+select concat ( first_name, last_name) ename from employees;
+
+REf: https://dev.mysql.com/doc/refman/5.5/en/string-functions.html
+
+Numeric Functions:
+------------------
+Select ABS(-40);
+Select ABS(40);
+select SQRT(25);
+select MOD(10,3);
+select power(2,5);
+
+TRUNCATE(): function truncates a number to the specified number of decimal places.
+
+select TRUNCATE(40.1234,3); --40.123
+select TRUNCATE(40.1234,2); --40.12
+select TRUNCATE(6876,-1); -- 6870
+select TRUNCATE(6876,-2); -- 6800
+select TRUNCATE(68763456,-5); -- 68700000
+
+Greates() & Least(): returns greatest, least values in the provided values.
+
+select greatest(100,200,300,400,500) .
+select least(100,200,300)[;
+
+Ref: https://dev.mysql.com/doc/refman/5.5/en/numeric-functions.html
+
+Date Functions
+--------------
+CURDATE()/CURRENT_DATE() function returns the current date.
+-> SELECT CURDATE();
+-> SELECT CURRENT_DATE();
+
+CURTIME()/CURRENT_TIME() function returns the current time.
+-> SELECT CURTIME();
+-> SELECT CURRENT_TIME();
+
+NOW()function returns the current date and time.
+SELECT NOW();
+
+SYSDATE() function returns the current date and time
+SELECT SYSDATE();
+
+MONTH() function returns the month part for a given date (a number from 1 to 12);
+SELECT MONTH("2019-05-19"); - 5
+
+YEAR() function returns the year part for a given date from (a number from 1000 to 9999).
+SELECT YEAR("2019-05-19"); --2019
+
+DAY() function returns the day of the month for a given date (a number from 1 to 31).
+SELECT DAY("2019-05-19"); --19
+
+REF: https://dev.mysql.com/doc/refman/5.5/en/date-and-time-function.html
+
+Queries on Date Functions
+--------------------------
+-> Display employees who are joined in 1987.
+SELECT * FROM EMPLOYEES WHERE YEAR (HIRE_DATE)="1987";
+
+-> Display employees who are joined in June.
+SELECT * FROM EMPLOYEES WHERE MONTH(HIRE_DATE)="6";
+SELECT * FROM EMPLOYEES WHERE MONTHNAME(HIRE_DATE)="JUNE";
+
+Aggregate Functions:
+--------------------
+-> Aggregate Functions are all about performing calculations on multiple rows of a single column of a table and returning a single value.
+
+USE hr;
+
+SELECT AVG(SALARY) FROM EMPLOYEES;
+SELECT SUM(SALARY) FROM EMPLOYEES;
+SELECT MIN(SALARY) FROM EMPLOYEES;
+SELECT MAX(SALARY) FROM EMPLOYEES;
+SELECT COUNT(*) FROM EMPLOYEES;
+
+SESSION:7
+---------
+Group By --> Grouping results from a table
+Having
+
+	WHERE ------ GROUP BY ----- HAVING 
+
+Group By Clause:
+----------------
+-> The GROUP BY clause groups records into summary rows.
+-> GROUP BY returns one records for each group.
+-> GROUP BY typically also involves aggregates: COUNT, MAX, SUM, AVG etc.
+-> GROUP BY can group by one or more columns.
+
+SELECT DEPARTMENT_ID, SUM(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+SELECT DEPARTMENT_ID, AVG(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+SELECT DEPARTMENT_ID, MAX(SALARY),MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+SELECT JOB_ID, COUNT(*) FROM EMPLOYEES GROUP BY JOB_ID;
+
+All the columns in the select list should include group by clause.
+SELECT DEPARTMENT_ID, JOB_ID, SUM(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID, JOB_ID;
+SELECT DEPARTMENT_ID, SUM(SALARY), FIRST_NAME FROM EMPLOYEES GROUP BY DEPARTMENT_ID; //INVALID QUERY
+
+Having & Order by clause
+------------------------
+Having clause: Having clause is used to filter the output from the group by clause.
+
+SELECT DEPARTMENT_ID, SUM(SALRY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID HAVING
+SUM(SALARY)> 20000;
+
+SELECT DEPARMENT_ID, SUM(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID <>50 GROUP
+BY DEPARTMENT_ID;
+
+Order by clause: Order by clause is used to arrange the rows in a table (ascending or descending order).
+SELECT * FROM EMPLOYEES ORDER BY DEPARTMENT_ID DESC;
+SELECT * FROM EMPLOYEES ORDER BY SALARY;
+
+WHERE ------ GROUP BY ----- HAVING 
+
+SELECT DEPARTMENT_ID. SUM(SALARY) FROM EMPLOYEES WHERE DEPARTMEN_ID<>50 GROUP BY DEPARTMENT_ID HAVING SUM(SALARY)>10000;
+
+ORDER OF EXECUTION:
+------------------
+-> Where -> Group by -> Having -> Order By
+
+SELECT  column names 
+ FROM table-name
+  WHERE condition 
+   GROUP BY column-names 
+     HAVING condition
+      ORDER BY column-names
+
+-> SELECT DEPARTMENT_ID, SUM(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID HAVING 
+   SUM(SALARY)>20000 ORDER BY SUM(SALARY);
+
+-> SELECT DEPARTMENT_ID, SUM(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID <> 100 GROUP BY 
+   DEPARTMENT_ID HAVING SUM(SALARY)>20000 ORDER BY SUM(SALARY) DESC;
+
+SET OPERATORS
+------------
+UNION 
+UNION ALL
+(INTERSECT, MINUS) --> NOT WORKING IN MYSQL
+
+UNION & UNION ALL
+-----------------
+-> The UNION operator is used to combine the result set of two or more SELECT statements.
+-> Each SELECT statement within UNION must have the "same number of columns"
+-> The columns must also have "similar datatypes".
+-> The columns in each SELECT statement must also be in the "same order"
+
+CREATE TABLE A(SNAME varchar(10), NUM INT(2));
+CREATE TABLE B(NUM INT (2), GRADE VARCHAR(3));
+
+INSERT INTO A VALUES ('ABC',10);
+INSERT INTO A VALUES ('XYZ',11);
+INSERT INTO A VALUES ('PQR',12);
+INSERT INTO A VALUES ('MNO',14);
+
+COMMIT;
+
+INSERT INTO B VALUES (11,'A');
+INSERT INTO B VALUES (12,'B');
+INSERT INTO B VALUES (13,'C');
+INSERT INTO A VALUES (15,'B');
+
+COMMIT;
+
+-> Displays all the records from multiple tables without duplicates.
+SELECT NUM FROM A UNION SELECT NUM FROM B;
+
+-> Displays all the records from multiple tables including duplicates.
+SELECT NUM FROM A UNION ALL SELECT NUM FROM B;
+
+
+SQL JOINS
+---------
+Joins help retrieving data from two or more database tables.
+The tables are mutually related using primary and foreign keys.
+
+Types of Joins
+ 1. Equi Join/Inner Join/Simple Join
+ 2. Right Join
+ 3. Left Join
+ 4. Full Join
+ 5. Self Join
+
+CREATE TABLE TAB1 (NUMID INT(3));
+CREATE TABLE TAB2 (NUMID INT(3));
+
+INSERT INTO TAB1 VALUES(10);
+INSERT INTO TAB1 VALUES(11);
+INSERT INTO TAB1 VALUES(12);
+INSERT INTO TAB1 VALUES(14);
+
+COMMIT;
+
+INSERT INTO TAB2 VALUES(11);
+INSERT INTO TAB2 VALUES(12);
+INSERT INTO TAB2 VALUES(13);
+INSERT INTO TAB2 VALUES(15);
+
+COMMIT;
+
+SELECT * FROM TAB1;
+SELECT * FROM TAB2;
+
+INNER JOIN/EQUI JOIN:(Returns Only matched records from Tab1 & Tab2)
+---------
+SELECT * FROM TAB1
+INNER JOIN TAB2
+ON TAB1.NUMID=TAB2.NUMID;
+RESULT: [11,12]
+
+LEFT OUTER JOIN(Returns matched records + unmatched from right table Tab2)
+---------------
+SELECT * FROM TAB1
+LEFT OUTER JOIN TAB2
+ON TAB1.NUMID=TAB2.NUMID;
+RESULT: [10.14.11.12]
+
+RIGHT OUTER JOIN (Returns matched records + unmatched from right table Tab1)
+----------------
+SELECT * FROM TAB1
+RIGHT OUTER JOIN TAB2
+ON TAB1.NUMID=TAB2.NUMID;
+RESULT:[11,12,13,15]
+
+FULL OUTER JOIN (Returns matched + unmatched from both tables ) -- not supported in MySQL 
+----------------
+SELECT * FROM TAB1
+FULL OUTER JOIN TAB2
+ON TAB1.NUMID=TAB2.NUMID;
+
+INNER JOIN QUERY:
+-------
+SELECT * FROM EMPLOYEES INNER JOIN DEPARTMENTS 
+ON 
+EMPLOYEES.DEPARTMENT_ID=DEPARTMENTS.DEPARTMENT_Id;
+
+SELECT FIRST_NAME, SALARY, DEPARTMENTS.DEPARTMENT_ID FROM EMPLOYEES INNER JOIN DEPARTEMENTS
+ON
+EMPLOYEES.DEPARTMENT_ID=DEPARTMENTS.DEPARTMENT_ID;
+
+SELECT EMPLOYEE_ID, FIRST_NAME, JOB_ID, DEPT.DEPARTEMENT_ID, DEPARTMENT_NAME,LOCATION_ID
+FROM EMPLOYEES EMP INNER JOIN DEPARTMENTS DEPT ON 
+EMP.DEPARTMENT_ID=DEPT.DEPARTMENT _ID;
+
+SELECT EMPLOYEES_ID, FIRST_NAME,JOB_ID, DEPARTMENTS.DEPARTMENT_ID, DEPARTMENT_NAME, LOCATION_ID
+FROM EMPLOYEES LEFT JOIN DEPARTMENTS
+ON (EMPLOYEES.DEPARTMENT_ID=DEPARTMENTS.DEPARTMENT_ID);
+
+SELECT EMPLOYEES_ID, FIRST_NAME,JOB_ID, DEPARTMENTS.DEPARTMENT_ID, DEPARTMENT_NAME, LOCATION_ID
+FROM EMPLOYEES RIGHT JOIN DEPARTMENTS
+ON (EMPLOYEES.DEPARTMENT_ID=DEPARTMENTS.DEPARTMENT_ID);
+
+SELF JOIN:
+---------
+Join with a table with the same table 
+
+Query: Print Employees details who is Manager of other employees.
+
+SELECT E.EMPLOYEE_ID, M.MANAGER_ID, E.FIRST_NAME, E.JOB_ID, M.FIRST_NAME FROM 
+EMPLOYEES E, EMPLOYEES M WHERE EMPLOYEE_ID = M.MANAGER_ID;
+
+Sub Queries:
+------------
+Sub Query is a Query within a Query.
+
+Sub Query contains 2 parts.
+1. Outer Query
+2. Inner Query
+
+The output of inner query is become input of outer query.
+
+2 Types of Sub Queries:
+  1. Single row sub query, <=, >=, !=
+  2. Multi row Sub Query. IN, ANY, ALL
+
+Single Row Sub Queries:
+----------------------
+-> Display employees whose salary is less than the of Ellen.
+
+SELECT * FROM EMPLOYEES WHERE SALARY <(SELECT SALARY FROM EMPLOYEES 
+WHERE FIRST_NAME = 'Ellen');
+
+-> 2nd max salary from employee
+
+SELECT MAX(SALARY) FROM EMPLOYEES WHERE SALARY <(SELECT MAX(SALARY) FROM 
+EMPLOYEES);
+
+-> 3rd Maximum salary
+
+SELECT MAX(SALARY) FROM EMPLOYEES WHERE SALARY < (SELECT MAX(SALARY) FROM EMPLOYEES WHERE SALARY
+<(SELECT MAX(SALARY) FROM EMPLOYEES ));
+
+-> Find the salary of employees whose salary is greater than the salary of employee whose EMPLOYEE_ID 150.
+SELECT SALARY FROM EMPLOYEES WHERE SALARY > (SELECT SALARY FROM EMPLOYEES WHERE EMPLOYEE_ID=150);
+
+-> Display the employees who all are earning the highest salary.
+
+SELECT * FROM EMPLOYEES WHERE SALARY = (SELECT MAX(SALARY) FROM EMPLOYEES);
+
+MULTI ROW SUB QUERIES:
+---------------------
+-> Display employees whose salary is equal to the salary of the at least one employee in department id 30.
+SELECT * FROM EMPLOYEES WHERE SALARY IN (SELECT SALARY FROM EMPLOYEES WHERE DEPARTMENT_ID = 30);
+
+-> Display the employees whose salary is greater than the at least on employee in department id 30.
+SELECT * FROM EMPLOYEES WHERE SALARY > ANY (SELECT SALARY FROM EMPLOYEES WHERE DEPARTMENT_ID=30);
+
+-> Display the employees whose salary is less than the at least on employee in department id 30.
+SELECT * FROM EMPLOYEES WHERE SALARY < ANY (SELECT SALARY FROM EMPLOYEES WHERE DEPARTMENT_ID=30);
+
+-> Query to get department name of the employee
+SELECT FIRST_NAME, EMPLOYEE_ID, DEPARTMENT_ID, (SELECT DEPARTMENT_NAME FROM DEPARTMENTS
+WHERE EMPLOYEES.DEPARTMENT_ID=DEPARTMENTS.DEPARTMENT_ID)DNAME FROM EMPLOYEES;
+
+-> List out the employees who are having salary less than the maximum salary and also having hire 
+date is greater than the hire date of an employee who is having maximum salary.
+
+SELECT EMPLOYEE_ID, FIRST_NAME, SALARY, HIRE_DATE FROM EMPLOYEES WHERE SALARY <
+(SELECT MAX(SALARY) FROM EMPLOYEES) AND HIRE_DATE>
+(SELECT HIRE_DATE FROM EMPLOYEES WHERE SALARY =
+(SELECT MAX(SALARY) FROM EMPLOYEES));
+
+INTEGRITY CONSTRAINTS:
+---------------------
+
+-> SQL constraints are used to specify rules for data in a table.
+
+-> Constraints can be specified when the table is created with the CREATE TABLE statement, or after 
+the table is created with the ALTER TABLE statement.
+
+SQL Constraints
+---------------
+NOT NULL -> Ensure that a column cannot have a NULL value
+UNIQUE -> Ensures that all values in a column are different
+PRIMARY KEY -> A combination of a NOT NULL and UNIQUE. Uniquely identifies each row in a table.
+FOREIGN KEY -> Uniquely identifies a row/record in another table
+CHECK -> Ensures that all values in a column satisfies a specific condition
+DEFAULT - Sets a default value for a column when no value is specified.
+
+NOT NULL:
+--------
+-> Not null: This is a constraint will not accept NULL values into the column.
+-> You can apply NOT NULL on any number of columns
+
+create table student1(sno int(3) NOT NULL, sname varchar(10), marks int(3));
+
+-> insert into student1 values (101, 'arun', 50); //correct 
+-> insert into student1 values (null, 'kiran', 70); //error
+
+UNIQUE:
+------
+-> UNIQUE: this constraint will not accept duplicate values.
+-> This constraint can apply on both column and table level.
+
+column level
+create table student1(sno int(3) unique, sname varchar(10), marks int(3));
+
+Table level
+create table student1(sno int(3), sname varchar(10), marks int(3), unique(sno));
+
+insert into student1 values (101, 'arun', 50);
+insert into student1 values(101, 'kiran' 60); // 101 not allowed 
+
+insert into student1 values (null, 'suresh', 80);
+insert into student1 values (null, 'raj', 60);
+
+-> Unique constraint column can accept multiple NULLs
+
+Primary Key:
+-----------
+PRIMARY KEY: Combination of Unique + Not Null
+primary key column will not allow duplicate values and also null values.
+primary key constraint can create both column level & table level.
+
+create table student1(
+sno int(3) primary key,
+sname varchar(10),
+marks int(3));
+
+insert into student1 values (101, 'arun', 50); //right
+insert into student1 values (101, 'suresh', 60); //invalid
+insert into student1 values (null, 'suresh', 60); //invalid
+
+-> we can create primary key on combination of two columns called as composite primary key
+-> composite key can be applied only at table level.
+
+Foreign key constraint:
+----------------------
+-> A FOREIGN KEY is a key used to link two tables together.
+-> A FOREIGN KEY is a field (or collection of fileds ) in one table that refers to the PRIMARY KEY in another table.
+-> The table containing the foreign key is called the child table, and the table containing the 
+   candidate key is called the reference or parent table.
+
+// parent table 
+
+create table school (
+sno int(3),
+sname varchar(15),
+marks int(3), 
+primary key (sno0);
+
+insert into school values (101, 'arun', 90);
+insert into school values (102,  'kiran', 70);
+insert into school values (103, 'amit', 80);
+
+select * from school;
+
+// child table
+create table library 
+(sno int(3), FOREIGN KEY(sno) REFERENCES 
+school(sno),
+book_name varchar(10));
+
+insert into library values(102, 'java');
+insert into library values(108, 'c'); // not valid
+insert into library values (null, 'dot net');
+
+delete from school where sno=102;
+
+1) When you insert a record in to child table, the column will be referred in parent table.
+2) If you try remove parent table record directly without deleting records from child table --> Not allowed 
+3) First, delete dependent record from child table, then delete record from parent table.
+
+4)on delete cascade 
+	If you delete record from parent table directly,
+it will be removed and corresponding records will be also deleted from child table.
+
+
+ON DELETE CASCADE:
+-----------------
+-> Normally, we cannot delete rows from Parent table unless we delete corresponding row from child table.
+-> We can delete the rows from the parent table & corresponding child table row as well (at same time)
+   by using ON DELETE CASCADE option.
+
+//parent table 
+
+create table school(
+sno int(3),
+sname varchar(15),
+marks int(3),
+primary key (sno));
+
+insert into school values (101, 'arun', 90);
+insert into school values (102, 'kiran', 70);
+insert itno school values (103, 'amit', 80);
+
+select * from school;
+
+// child table 
+
+create table libray 
+(sno int(3), FOREIGN KEY(sno) REFERENCES 
+school(sno) ON DELETE CASCADE,
+book_name varchar(10));
+
+insert into library values (101, 'dot net');
+insert into library values (102, 'java');
+
+select * from library;
+
+delete from school where sno=101;
+
+Foreign key constraint at table level
+--------------------------------------
+create table school (sno int(3),
+    	sname varchar2(15),
+	marks int(3),
+	primary key (sno));
+
+insert into school values (101, 'arun',50);
+insert into school values (102, 'ajay', 60);
+insert into school values (103, 'kiran', 80);
+
+create table library
+( rollno int(3),
+book_name varchar(10),
+foreign key (rollno) references school(sno) on delete cascade);
+
+insert into library values (101, 'dot net');
+insert into library values (102, 'java');
+
+CHECK CONSTRAINT
+----------------
+-> Check constraint is used for allowing to user to enter specific values into column.
+
+create table student (
+sno int(5),
+sname varchar(15),
+marks int(5) check (marks between 50 and 100));
+
+insert into student values (101, 'amith', 60); //valid
+insert into student values (101, 'amith', 45); //invalid
+insert into student values (101, 'amith', 105); //invalid
+
+create table loc
+(city varchar(15) check ( city in ('HYDERABAD', 'CHENNAI', 'DELHI')),
+country varchar(15),
+pin int(8));
+
+insert into loc values ('HYDERABAD', 'INDIA', 123456); //VALID
+insert into loc values ('MUMBAI', 'INDIA', 678445); //INVALID
+insert into loc values ('DELHI', 'INDIA', 678445); //VALID
+
+SELECT * FROM LOC;
+
+DEFAULT CONSTRAINT
+------------------
+-> The DEFAULT constraint is used to provide a default value for a column.
+-> The default value will be added to all new records IF no other value is specified.
+
+CREATE TABLE Orders 
+(ID int(5),
+OrderNumber int(5),
+OrderDate datetime DEFAULT now());
+
+insert into Orders (ID, OrderNumber) values(101,2456)
+insert into Orders (ID, OrderNumber) values(102,2457)
+
+select * from Orders;
+
+AUTO_INCREMENT
+--------------
+-> Auto increment is a function that operates on numeric data types. It automatically generates sequential numeric values every time that a record is inserted into a table for a field defined as auto increment.
+
+create table student
+(sno INT(5) primary key AUTO_INCREMENT,
+sname varchar(15),
+marks int(5));
+
+ALTER TABLE student AUTO_INCREMENT =100;
+
+insert into student(sname, marks) values('X', 60);
+insert into student(sname, marks) values('Y', 45);
+insert into student(sname, marks) values('Z', 105);
+
+SET SQL_SAFE_UPDATES=0; -- whenever deleting and updating we have to use this
+
+
+select * from student;
+
+LIMIT
+-----
+-> Limit is used to display limited Rows from a table.
+
+SELECT * FROM EMPLOYEES LIMIT 10;
+SELECT * FROM EMPLOYEES LIMIT 5, 10;
+
+VIEWS:
+------
+-> A view is a virtual table based on the result-set of an SQL statement.
+
+-> A view contains rows and columns, just like a real table. The fields in a view are fields from one or more real tables in the database.
+
+-> You can add SQL functions, WHERE, and JOIN statements to a view and present the data as if the data were coming from one single table.
+
+Example:
+
+use hr;
+
+SELECT * FROM EMPLOYEES;
+
+Creating a view 
+ - CREATE VIEW EMPLOYEES_V1 AS SELECT EMPLOYEE_ID, FIRST_NAME, SALARY FROM EMPLOYEES;
+
+SELECT * FROM EMPLOYEES_V1;
+
+Dropping View
+ - DROP VIEW EMPLOYEES_V1;
+
+INDEX:
+-----
+-> Indexes are used to retrieve data from the database very fast.
+-> The users cannot see the indexes, they are just used to speed up searches/queries.
+
+-> Creating Index:
+  - CREATE INDEX idx_employees On Employees (First_Name);
+
+-> Dropping Index:
+  - drop index idx_employees on Employees;
+
+TCL - Commit & Rollback
+-----------------------
+SET autocommit=1;
+drop table student;
+create table student(sid int(3), sname varchar(15));
+
+insert into student values (101, 'abc');
+insert into student values (102, 'abc');
+insert into student values (103, 'abc');
+
+Delete from student where sid=103; //Deletes record temporarily
+
+Select * from student;
+
+Rollback; //Rollback record 
+
+select * from student;
+
+commit; // Committed delete
+Rollback;
+
+selec * from student; // cannot get deleted record after commit;
+
+JDBC:
+-----
+Java(JDK)
+Eclipse
+3) MySQL JDBC Driver 
+
+https://dev.mysql.com/downloads/connector/j/
+
+insert, update, delete 
+
+1) Create a connection
+2) Create statement / Query
+3) Execute statement/Query
+4) close connection
+
+select 
+
+1) Create a connection
+2) Create statement/Query
+3) Execute statement/Query 
+4) store the results in result set 
+5) close connection
